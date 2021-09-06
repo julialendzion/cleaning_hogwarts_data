@@ -1,7 +1,9 @@
 "use strict";
 
 window.addEventListener("DOMContentLoaded", start);
-const allStudents = [];
+
+const allStudents = []; //creating an array
+
 let Student = {
   firstName: "",
   lastName: "",
@@ -28,16 +30,19 @@ function loadJSON() {
 }
 function prepareObjects(jsonData) {
   jsonData.forEach((jsonObject) => {
-    // TODO: Create new object with cleaned data - and store that in the allAnimals array
-    // TODO: MISSING CODE HERE !!!
     console.log(jsonObject);
-    const student = Object.create(Student); // o co tu chodzi?
+
+    const student = Object.create(Student); // new object with cleaned data
+
     student.firstName = getStudentsName(jsonObject.fullname.trim());
     student.lastName = getStudentsLastName(jsonObject.fullname.trim());
-    allStudents.push(student);
+    student.middleName = getStudentsMiddleName(jsonObject.fullname.trim());
+    student.house = getHouse(jsonObject.house.trim());
+    allStudents.push(student); //adding students to the allStudents array
   });
   console.table(allStudents);
 }
+
 function getStudentsName(fullName) {
   const name = fullName.substring(0, fullName.indexOf(" "));
   const firstName = clean(name);
@@ -49,6 +54,23 @@ function getStudentsLastName(fullName) {
   const lastName = clean(last);
   return lastName;
 }
+
+function getStudentsMiddleName(fullName) {
+  if (fullName.includes(" ") == true) {
+    const middleSpace = fullName.slice(fullName.indexOf(" ") + 1, fullName.lastIndexOf(" "));
+    const firstCharacter = middleSpace.slice(0, 1);
+    if (firstCharacter !== '"') {
+      const cleanMiddleName = clean(middleSpace);
+      return cleanMiddleName;
+    }
+  }
+}
+function getHouse(dataHouse) {
+  const house = clean(dataHouse);
+  return house;
+}
+
+//function getStudentsNickname(fullName) {}
 
 function clean(name) {
   const firstLetter = name.slice(0, 1).toUpperCase();
